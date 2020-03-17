@@ -72,7 +72,7 @@ const config = {
       filename: '[name].css',
     }),
     new CopyPlugin([
-      { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
+      { from: 'icons', to: 'icons' },
       { from: 'index.html', to: 'index.html', transform: transformHtml },
       {
         from: 'manifest.json',
