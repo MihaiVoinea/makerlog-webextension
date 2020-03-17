@@ -1,0 +1,6 @@
+[build]
+  base = "netlify"
+  functions = "functions"
+
+[dev]
+  publish = "netlify"
