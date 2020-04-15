@@ -2,18 +2,13 @@ const axios = require("axios");
 const querystring = require("querystring");
 
 exports.handler = async event => {
-  // eslint-disable-next-line camelcase
-  const { refresh_token } = event.queryStringParameters;
-  // eslint-disable-next-line camelcase
-  if (refresh_token) {
+  const { code } = event.queryStringParameters;
+  if (code) {
     try {
       const response = await axios({
         method: "POST",
         url: "https://api.getmakerlog.com/oauth/token/",
-        data: querystring.stringify({
-          grant_type: "refresh_token",
-          refresh_token
-        }),
+        data: querystring.stringify({ grant_type: "authorization_code", code }),
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         auth: {
           username: process.env.CLIENT_ID,

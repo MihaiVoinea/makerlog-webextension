@@ -1,17 +1,18 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-
-import * as getters from './getters';
-import mutations from './mutations';
-import * as actions from './actions';
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    foo: 'bar',
+    access_token: undefined,
+    expires_in: undefined,
+    scope: undefined,
+    refresh_token: undefined
   },
-  getters,
-  mutations,
-  actions,
+  getters: {
+    isLoggedIn(state) {
+      return !!state.access_token;
+    }
+  }
 });
