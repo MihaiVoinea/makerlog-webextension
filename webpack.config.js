@@ -62,7 +62,7 @@ const config = {
         options: {
           name: "[name].[ext]",
           outputPath: "/fonts/",
-          emitFile: false
+          emitFile: true
         }
       }
     ]
@@ -73,8 +73,7 @@ const config = {
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: "[name].css",
-      chunkFilename: "[id].css"
+      filename: "[name].css"
     }),
     new CopyPlugin([
       { from: "icons", to: "icons" },
