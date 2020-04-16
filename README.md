@@ -1,4 +1,4 @@
-# Makerlog Homepage
+# Makerlog Webextension
 
 Browser extension that provides a new tab homepage for Makerlog, a community of independent creators that build and ship products!
 
