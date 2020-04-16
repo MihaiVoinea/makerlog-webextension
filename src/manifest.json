@@ -1,5 +1,5 @@
 {
-  "name": "makerlog-homepage",
+  "name": "makerlog-webextension",
   "description": "Homepage for Makerlog, a community of independent creators that build and ship products!",
   "version": null,
   "manifest_version": 2,
@@ -10,7 +10,7 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": ["tabs", "https://makerlog-homepage.netlify.app/"],
+  "permissions": ["tabs", "https://makerlog-webextension.netlify.app/"],
   "background": {
     "scripts": ["background.js"]
   }

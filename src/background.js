@@ -16,12 +16,12 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     url
       .toLowerCase()
       .startsWith(
-        "https://makerlog-homepage.netlify.app/.netlify/functions/callback?code="
+        "https://makerlog-webextension.netlify.app/.netlify/functions/callback?code="
       )
   ) {
     // Old code to get the 'code' param
     // const code = url.match(
-    // /(?<=(https\:\/\/makerlog\-homepage\.netlify\.app\/\.netlify\/functions\/callback\?code\=)).*$/i
+    // /(?<=(https\:\/\/makerlog\-webextension\.netlify\.app\/\.netlify\/functions\/callback\?code\=)).*$/i
     // )[0];
 
     // Convert the 'url' string to an URL object.
