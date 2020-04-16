@@ -73,7 +73,8 @@ const config = {
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: "[name].css"
+      filename: "[name].css",
+      chunkFilename: "[id].css"
     }),
     new CopyPlugin([
       { from: "icons", to: "icons" },

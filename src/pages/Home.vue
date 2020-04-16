@@ -1,19 +1,23 @@
 <template>
-  <div>Home {{ user.first_name || "no" }}</div>
+  <div><Header></Header></div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
+import Header from "../components/Header";
 
 export default {
-  mounted() {
-    this.getUser();
-  },
-  methods: {
-    ...mapActions(["getUser"])
+  components: {
+    Header
   },
   computed: {
     ...mapState(["user"])
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div {
+  background: red;
+}
+</style>

@@ -3,7 +3,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import VuexPersistence from "vuex-persist";
-
 import browser from "webextension-polyfill";
 import config from "../config";
 
@@ -74,6 +73,7 @@ export default new Vuex.Store({
       }
     },
     async getUser({ commit }) {
+      console.log("getUser called");
       try {
         const resp = await axios({
           url: "/me",

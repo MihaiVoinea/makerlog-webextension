@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "reconnecting-websocket": "^4.4.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
