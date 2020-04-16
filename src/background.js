@@ -3,8 +3,6 @@ import store from "./store";
 
 const browser = require("webextension-polyfill");
 
-store.state.loadingStore = false;
-
 const launchNewTab = () => {
   browser.tabs.create({});
 };

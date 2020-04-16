@@ -2,31 +2,37 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import VuexWebExtensions from "vuex-webextensions";
+import VuexPersistence from "vuex-persist";
+
 import config from "../config";
+
+// const browser = require("webextension-polyfill");
+
+const vuexLocal = new VuexPersistence({
+  // storage: browser.storage.local
+});
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     access_token: undefined,
-    expires_in: undefined,
     scope: undefined,
     refresh_token: undefined,
-    loadingStore: true
+    user: undefined
   },
   mutations: {
     SET_ACCESS_TOKEN(state, accessToken) {
       state.access_token = accessToken;
-    },
-    SET_EXPIRES_IN(state, expiresIn) {
-      state.expires_in = expiresIn;
     },
     SET_SCOPE(state, scope) {
       state.scope = scope;
     },
     SET_REFRESH_TOKEN(state, refreshToken) {
       state.refresh_token = refreshToken;
+    },
+    SET_USER(state, user) {
+      state.user = user;
     }
   },
   getters: {
@@ -35,7 +41,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async auth({ commit }, code) {
+    async auth({ commit, dispatch }, code) {
       try {
         const resp = await axios({
           url: config.functionsAuthUrl,
@@ -44,27 +50,34 @@ export default new Vuex.Store({
         });
         if (resp.data) {
           // eslint-disable-next-line camelcase
-          const { access_token, expires_in, scope, refresh_token } = resp.data;
+          const { access_token, scope, refresh_token } = resp.data;
+          // eslint-disable-next-line camelcase
+          axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+          axios.defaults.baseURL = config.makerlogApiUrl;
           commit("SET_ACCESS_TOKEN", access_token);
-          commit("SET_EXPIRES_IN", expires_in);
           commit("SET_SCOPE", scope);
           commit("SET_REFRESH_TOKEN", refresh_token);
+          dispatch("getUser");
         }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);
       }
+    },
+    async getUser({ commit }) {
+      try {
+        const resp = await axios({
+          url: "/me",
+          method: "get"
+        });
+        if (resp.data) {
+          console.log(resp.data);
+          commit("SET_USER", resp.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
-  plugins: [
-    VuexWebExtensions({
-      persistentStates: [
-        "access_token",
-        "refresh_token",
-        "scope",
-        "loadingStore"
-      ],
-      syncActions: false
-    })
-  ]
+  plugins: [vuexLocal.plugin]
 });
