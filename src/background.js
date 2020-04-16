@@ -3,13 +3,15 @@ import store from "./store";
 
 const browser = require("webextension-polyfill");
 
+store.state.loadingStore = false;
+
 const launchNewTab = () => {
   browser.tabs.create({});
 };
 
 browser.runtime.onInstalled.addListener(launchNewTab);
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
+browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   const { url } = changeInfo;
   if (
     url &&
@@ -23,12 +25,17 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     // const code = url.match(
     // /(?<=(https\:\/\/makerlog\-webextension\.netlify\.app\/\.netlify\/functions\/callback\?code\=)).*$/i
     // )[0];
-
-    // Convert the 'url' string to an URL object.
-    const urlObject = new URL(url);
-    // Get the 'code' param
-    const code = urlObject.searchParams.get("code");
-
-    console.log(code);
+    if (!store.getters.isLoggedIn) {
+      // Convert the 'url' string to an URL object.
+      const urlObject = new URL(url);
+      // Get the 'code' param
+      const code = urlObject.searchParams.get("code");
+      await store.dispatch("auth", code);
+      browser.tabs.remove(tabId);
+      browser.tabs.create({});
+    } else {
+      browser.tabs.remove(tabId);
+      browser.tabs.create({});
+    }
   }
 });

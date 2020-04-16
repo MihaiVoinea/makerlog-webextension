@@ -3,7 +3,7 @@ exports.handler = async event => {
   if (code) {
     return {
       statusCode: 200,
-      body: code
+      body: ""
     };
   }
   return {

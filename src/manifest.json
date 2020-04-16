@@ -10,7 +10,11 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": ["tabs", "https://makerlog-webextension.netlify.app/"],
+  "permissions": [
+    "tabs",
+    "https://makerlog-webextension.netlify.app/",
+    "storage"
+  ],
   "background": {
     "scripts": ["background.js"]
   }
