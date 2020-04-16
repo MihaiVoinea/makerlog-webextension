@@ -19,11 +19,17 @@ const router = new VueRouter({
   routes
 });
 
+const waitForStorageToBeReady = async (to, from, next) => {
+  await store.restored;
+  next();
+};
+router.beforeEach(waitForStorageToBeReady);
+
+// eslint-disable-next-line consistent-return
 router.beforeEach((to, from, next) => {
   if (!store.getters.isLoggedIn) {
     window.location = config.makerlogOauthAuthorizationUrl;
-  }
-  return next();
+  } else return next();
 });
 
 export default router;

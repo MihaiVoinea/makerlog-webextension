@@ -4,12 +4,21 @@ import Vuex from "vuex";
 import axios from "axios";
 import VuexPersistence from "vuex-persist";
 
+import browser from "webextension-polyfill";
 import config from "../config";
 
-// const browser = require("webextension-polyfill");
-
-const vuexLocal = new VuexPersistence({
-  // storage: browser.storage.local
+const vuexBrowserStorage = new VuexPersistence({
+  saveState: (key, state) => {
+    const obj = {};
+    obj[key] = JSON.stringify(state);
+    browser.storage.local.set(obj);
+  },
+  restoreState: async key => {
+    const results = await browser.storage.local.get(key);
+    if (!results[key]) return {};
+    return JSON.parse(results[key]);
+  },
+  asyncStorage: true
 });
 
 Vue.use(Vuex);
@@ -71,13 +80,13 @@ export default new Vuex.Store({
           method: "get"
         });
         if (resp.data) {
-          console.log(resp.data);
           commit("SET_USER", resp.data);
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
       }
     }
   },
-  plugins: [vuexLocal.plugin]
+  plugins: [vuexBrowserStorage.plugin]
 });

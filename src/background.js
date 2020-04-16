@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
+import browser from "webextension-polyfill";
 import store from "./store";
-
-const browser = require("webextension-polyfill");
 
 const launchNewTab = () => {
   browser.tabs.create({});
@@ -29,11 +28,11 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
       // Get the 'code' param
       const code = urlObject.searchParams.get("code");
       await store.dispatch("auth", code);
-      browser.tabs.remove(tabId);
       browser.tabs.create({});
+      browser.tabs.remove(tabId);
     } else {
-      browser.tabs.remove(tabId);
       browser.tabs.create({});
+      browser.tabs.remove(tabId);
     }
   }
 });

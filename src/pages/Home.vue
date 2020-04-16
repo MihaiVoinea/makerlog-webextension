@@ -1,11 +1,9 @@
 <template>
-  <div>
-    Home
-  </div>
+  <div>Home {{ user.first_name || "no" }}</div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   mounted() {
@@ -13,6 +11,9 @@ export default {
   },
   methods: {
     ...mapActions(["getUser"])
+  },
+  computed: {
+    ...mapState(["user"])
   }
 };
 </script>

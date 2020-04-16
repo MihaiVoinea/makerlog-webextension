@@ -11,10 +11,15 @@ Vue.prototype.$browser = global.browser;
 
 axios.defaults.baseURL = config.makerlogApiUrl;
 
-if (store.getters.isLoggedIn) {
-  // Set Bearer token in axios headers
-  axios.defaults.headers.common.Authorization = `Bearer ${store.state.access_token}`;
-}
+const setupAxios = async () => {
+  await store.restored;
+  if (store.getters.isLoggedIn) {
+    // Set Bearer token in axios headers
+    axios.defaults.headers.common.Authorization = `Bearer ${store.state.access_token}`;
+  }
+};
+
+setupAxios();
 
 /* eslint-disable no-new */
 new Vue({
