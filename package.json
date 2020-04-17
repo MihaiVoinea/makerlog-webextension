@@ -63,7 +63,7 @@
     "sass-loader": "^8.0.2",
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.6.10",
-    "web-ext-types": "^2.1.0",
+    "web-ext-types": "^3.2.1",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.10",
     "webpack-extension-reloader": "^1.1.0"
