@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="logo">
+    <a href="https://getmakerlog.com" id="logo">
       <svg
         aria-hidden="true"
         focusable="false"
@@ -24,20 +24,56 @@
         />
       </svg>
       <h1>Makerlog</h1>
+    </a>
+    <div>
+      <img
+        :src="user.avatar"
+        :alt="`${user.first_name} ${user.last_name}`"
+        class="avatar"
+      />
+      <div>
+        <span>🔥</span><span>{{ user.streak }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 100%;
+}
 #logo svg {
   width: 30px;
   path {
     fill: url(#brand-gradient) #47e0a0;
   }
 }
-h1 {
+#logo {
+  text-decoration: none;
+  display: flex;
+  padding: 2px;
+  margin: 8px;
+  color: var(--c-main-light);
+}
+#logo h1 {
   font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 700;
+  margin: 0 0 0 10px;
 }
 </style>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  mounted() {
+    console.log(this.user);
+  },
+  computed: {
+    ...mapState(["user"]),
+  },
+};
+</script>

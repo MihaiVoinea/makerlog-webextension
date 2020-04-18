@@ -12,12 +12,12 @@ const vuexBrowserStorage = new VuexPersistence({
     obj[key] = JSON.stringify(state);
     browser.storage.local.set(obj);
   },
-  restoreState: async key => {
+  restoreState: async (key) => {
     const results = await browser.storage.local.get(key);
     if (!results[key]) return {};
     return JSON.parse(results[key]);
   },
-  asyncStorage: true
+  asyncStorage: true,
 });
 
 Vue.use(Vuex);
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     access_token: undefined,
     scope: undefined,
     refresh_token: undefined,
-    user: undefined
+    user: undefined,
   },
   mutations: {
     SET_ACCESS_TOKEN(state, accessToken) {
@@ -41,12 +41,12 @@ export default new Vuex.Store({
     },
     SET_USER(state, user) {
       state.user = user;
-    }
+    },
   },
   getters: {
     isLoggedIn(state) {
       return !!state.access_token;
-    }
+    },
   },
   actions: {
     async auth({ commit, dispatch }, code) {
@@ -54,7 +54,7 @@ export default new Vuex.Store({
         const resp = await axios({
           url: config.functionsAuthUrl,
           method: "GET",
-          params: { code }
+          params: { code },
         });
         if (resp.data) {
           // eslint-disable-next-line camelcase
@@ -72,12 +72,45 @@ export default new Vuex.Store({
         console.log(error);
       }
     },
+    async refreshToken({ commit, dispatch }) {
+      console.log("refreshToken() called");
+      // eslint-disable-next-line camelcase
+      const oldRefreshToken = this.state.refresh_token;
+      if (oldRefreshToken)
+        try {
+          const resp = await axios({
+            url: config.functionsRefreshUrl,
+            method: "GET",
+            params: { refresh_token: oldRefreshToken },
+          });
+          if (resp.data) {
+            // eslint-disable-next-line camelcase
+            const { access_token, scope, refresh_token } = resp.data;
+            // eslint-disable-next-line camelcase
+            axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+            axios.defaults.baseURL = config.makerlogApiUrl;
+            commit("SET_ACCESS_TOKEN", access_token);
+            commit("SET_SCOPE", scope);
+            commit("SET_REFRESH_TOKEN", refresh_token);
+            dispatch("getUser");
+          }
+          return resp;
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log(error);
+          return error;
+        }
+      else {
+        console.log("refreshToken() failed: no refresh_token in state");
+        return new Error("no refresh_token in state");
+      }
+    },
     async getUser({ commit }) {
-      console.log("getUser called");
+      console.log("getUser() called");
       try {
         const resp = await axios({
           url: "/me",
-          method: "get"
+          method: "get",
         });
         if (resp.data) {
           commit("SET_USER", resp.data);
@@ -86,7 +119,7 @@ export default new Vuex.Store({
         // eslint-disable-next-line no-console
         console.log(error);
       }
-    }
+    },
   },
-  plugins: [vuexBrowserStorage.plugin]
+  plugins: [vuexBrowserStorage.plugin],
 });

@@ -1,7 +1,7 @@
 const axios = require("axios");
 const querystring = require("querystring");
 
-exports.handler = async event => {
+exports.handler = async (event) => {
   // eslint-disable-next-line camelcase
   const { refresh_token } = event.queryStringParameters;
   // eslint-disable-next-line camelcase
@@ -12,27 +12,27 @@ exports.handler = async event => {
         url: "https://api.getmakerlog.com/oauth/token/",
         data: querystring.stringify({
           grant_type: "refresh_token",
-          refresh_token
+          refresh_token,
         }),
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         auth: {
           username: process.env.CLIENT_ID,
-          password: process.env.CLIENT_SECRET
-        }
+          password: process.env.CLIENT_SECRET,
+        },
       });
       return {
         statusCode: response.status,
-        body: JSON.stringify(response.data)
+        body: JSON.stringify(response.data),
       };
     } catch (error) {
       return {
         statusCode: error.response.status,
-        body: JSON.stringify(error.response.data)
+        body: JSON.stringify(error.response.data),
       };
     }
   } else
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: "no_code_provided" })
+      body: JSON.stringify({ error: "no_code_provided" }),
     };
 };

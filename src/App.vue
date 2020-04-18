@@ -5,6 +5,14 @@
 </template>
 
 <style lang="scss">
+:root {
+  --c-bg: #f6f6f6;
+  --c-main: #00a676;
+  --c-main-light: #47e0a0;
+}
+body {
+  background: var(--c-bg);
+}
 /* latin */
 @font-face {
   font-family: "Poppins";
