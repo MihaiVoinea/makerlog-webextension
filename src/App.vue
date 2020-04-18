@@ -9,7 +9,12 @@
   --c-bg: #f6f6f6;
   --c-main: #00a676;
   --c-main-light: #47e0a0;
+
+  --c-border: #dbdbdb;
+  --c-border-light: #b5b5b5;
+  --c-border-lightest: #dbdbdb;
 }
+
 body {
   background: var(--c-bg);
 }

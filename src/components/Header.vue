@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <a href="https://getmakerlog.com" id="logo">
+  <div id="header">
+    <a href="https://getmakerlog.com" class="logo">
       <svg
         aria-hidden="true"
         focusable="false"
@@ -25,13 +25,13 @@
       </svg>
       <h1>Makerlog</h1>
     </a>
-    <div>
+    <div class="user">
       <img
         :src="user.avatar"
         :alt="`${user.first_name} ${user.last_name}`"
         class="avatar"
       />
-      <div>
+      <div class="stats">
         <span>🔥</span><span>{{ user.streak }}</span>
       </div>
     </div>
@@ -39,25 +39,51 @@
 </template>
 
 <style lang="scss" scoped>
+.user {
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  margin: auto 40px;
+  img {
+    z-index: 2;
+  }
+  .stats {
+    padding: 8px 12px 8px 14px;
+    position: relative;
+    right: 5px;
+    z-index: 1;
+    background: #f5f5f5;
+    border-radius: 0 16px 16px 0;
+  }
+}
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   border-radius: 100%;
 }
-#logo svg {
+#header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-bottom: 0.2px solid var(--c-border-lightest);
+}
+.logo svg {
   width: 30px;
   path {
     fill: url(#brand-gradient) #47e0a0;
   }
 }
-#logo {
+.logo {
   text-decoration: none;
   display: flex;
+  align-items: center;
   padding: 2px;
-  margin: 8px;
+  margin: 16px 40px;
   color: var(--c-main-light);
 }
-#logo h1 {
+.logo h1 {
   font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 700;
