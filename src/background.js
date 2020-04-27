@@ -27,6 +27,10 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
       await store.dispatch("auth", code);
 
+      await store.restored;
+
+      await store.dispatch("getUser");
+
       browser.tabs.create({});
       browser.tabs.remove(tabId);
     }

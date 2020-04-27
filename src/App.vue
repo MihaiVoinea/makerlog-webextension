@@ -17,6 +17,9 @@
 
 body {
   background: var(--c-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    Helvetica, sans-serif;
 }
 /* latin */
 @font-face {

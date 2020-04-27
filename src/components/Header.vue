@@ -1,5 +1,5 @@
 <template>
-  <div id="header">
+  <header id="header">
     <a href="https://getmakerlog.com" class="logo">
       <svg
         aria-hidden="true"
@@ -25,7 +25,10 @@
       </svg>
       <h1>Makerlog</h1>
     </a>
-    <div class="user">
+    <div>
+      <Greeting />
+    </div>
+    <a :href="`https://getmakerlog.com/@${user.username}`" class="user">
       <img
         :src="user.avatar"
         :alt="`${user.first_name} ${user.last_name}`"
@@ -34,16 +37,19 @@
       <div class="stats">
         <span>🔥</span><span>{{ user.streak }}</span>
       </div>
-    </div>
-  </div>
+    </a>
+  </header>
 </template>
 
 <style lang="scss" scoped>
 .user {
-  padding: 2px;
+  padding: 4px;
+  width: 156.575px;
   display: flex;
   align-items: center;
   margin: auto 40px;
+  justify-content: flex-end;
+  text-decoration: none;
   img {
     z-index: 2;
   }
@@ -79,8 +85,8 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  padding: 2px;
-  margin: 16px 40px;
+  padding: 4px;
+  margin: 14px 40px;
   color: var(--c-main-light);
 }
 .logo h1 {
@@ -93,11 +99,10 @@
 
 <script>
 import { mapState } from "vuex";
+import Greeting from "./Greeting.vue";
 
 export default {
-  mounted() {
-    console.log(this.user);
-  },
+  components: { Greeting },
   computed: {
     ...mapState(["user"]),
   },
