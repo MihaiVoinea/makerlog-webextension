@@ -27,6 +27,7 @@
     "normalize.css": "^8.0.1",
     "reconnecting-websocket": "^4.4.0",
     "vue": "^2.6.10",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.3.0",
     "vuex-persist": "^2.2.0",

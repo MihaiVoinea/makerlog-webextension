@@ -1,5 +1,9 @@
 <template>
-  <ul>
+  <ul
+    v-infinite-scroll="loadMoreTasks"
+    infinite-scroll-disabled="disableLoadingMoreTasks"
+    infinite-scroll-distance="200"
+  >
     <TaskGroup
       v-for="(group, index) in groupedTasks"
       :key="index"
@@ -9,6 +13,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapState } from "vuex";
 import TaskGroup from "./TaskGroup.vue";
 
@@ -24,6 +29,7 @@ const groupTasksByDate = (tasks) => {
 
   const groupedTasks = [];
 
+  // Go through all tasks and group them
   tasks.forEach((task) => {
     const currentlyIteratedTaskDate = new Date(task.created_at);
     if (isSameDate(lastTaskDate, currentlyIteratedTaskDate)) {
@@ -35,18 +41,50 @@ const groupTasksByDate = (tasks) => {
     }
     lastTaskDate = currentlyIteratedTaskDate;
   });
+  groupedTasks.push(group);
   return groupedTasks;
 };
 
 export default {
+  data() {
+    return {
+      disableLoadingMoreTasks: false,
+      loadedTasks: [],
+      next: undefined,
+    };
+  },
   components: { TaskGroup },
+  async mounted() {
+    await this.$store.restored;
+    this.next = this.$store.state.task.next;
+  },
   computed: {
     groupedTasks() {
-      return groupTasksByDate(this.tasks);
+      return groupTasksByDate(this.tasks.concat(this.loadedTasks));
     },
     ...mapState({
       tasks: (state) => state.task.tasks,
     }),
+  },
+  methods: {
+    async loadMoreTasks() {
+      this.disableLoadingMoreTasks = true;
+      try {
+        const resp = await axios({
+          url: this.next,
+          method: "get",
+        });
+        if (resp.data) {
+          this.loadedTasks = this.loadedTasks.concat(resp.data.results);
+          this.next = resp.data.next;
+          if (this.next) this.disableLoadingMoreTasks = false;
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+        if (this.next) this.disableLoadingMoreTasks = false;
+      }
+    },
   },
 };
 </script>
