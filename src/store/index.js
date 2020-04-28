@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import VuexPersistence from "vuex-persist";
 import browser from "webextension-polyfill";
+import sharedMutations from "vuex-shared-mutations";
 import config from "../config";
 import task from "./modules/task";
 
@@ -123,5 +124,17 @@ export default new Vuex.Store({
     },
   },
   modules: { task },
-  plugins: [vuexBrowserStorage.plugin],
+  plugins: [
+    vuexBrowserStorage.plugin,
+    sharedMutations({
+      predicate: [
+        "SET_ACCESS_TOKEN",
+        "SET_SCOPE",
+        "SET_REFRESH_TOKEN",
+        "SET_USER",
+        "ADD_TASK",
+        "SET_TASKS",
+      ],
+    }),
+  ],
 });

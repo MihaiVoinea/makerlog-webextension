@@ -3,7 +3,7 @@ name: Release Upload
 on:
   push:
     tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
   build:
@@ -18,12 +18,13 @@ jobs:
         with:
           node-version: 12
       - name: Install dependencies
-        run: npm ci 
+        run: npm ci
       - name: Build extension # This build the extension for production
         run: npm run build
       - name: Zip extension # Archives the extension
         run: npm run build-zip
-      - run: echo "::set-env name=RELEASE_EXTENSION_FILE::$(cd dist-zip && ls *.zip)"
+      - name: Save zip path to an env variable
+        run: echo "::set-env name=RELEASE_EXTENSION_FILE::$(cd dist-zip && ls *.zip)"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -35,12 +36,12 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload Release Asset
-        id: upload-release-asset 
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: "./dist-zip/${{ env.RELEASE_EXTENSION_FILE }}"
           asset_name: ${{ env.RELEASE_EXTENSION_FILE }}
           asset_content_type: application/zip

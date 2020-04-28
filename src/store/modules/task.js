@@ -35,5 +35,8 @@ export default {
       state.next = next;
       state.prev = previous;
     },
+    ADD_TASK(state, newTask) {
+      state.tasks.unshift(newTask);
+    },
   },
 };

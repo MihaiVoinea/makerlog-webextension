@@ -47,7 +47,17 @@ const setupRws = () => {
     `wss://api.getmakerlog.com/stream/?token=${store.state.access_token}`
   );
   // eslint-disable-next-line no-console
-  rws.onmessage = (e) => console.log(e);
+  rws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    switch (data.type) {
+      case "task.created":
+        store.commit("ADD_TASK", data.payload);
+        break;
+      default:
+        console.log("rws other event catched", data.payload);
+        break;
+    }
+  };
 };
 
 const setup = async () => {
