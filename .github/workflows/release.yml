@@ -1,4 +1,4 @@
-name: Release Upload
+name: Release
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Release Upload
+    name: Release
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +25,18 @@ jobs:
         run: npm run build-zip
       - name: Save zip path to an env variable
         run: echo "::set-env name=RELEASE_EXTENSION_FILE::$(cd dist-zip && ls *.zip)"
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+        # Workaround to properly generate changelogs
+        # I know this is a mess...
+      - name: Generate changelogs
+        run: git fetch --unshallow && git checkout HEAD^ && git clone https://github.com/MihaiVoinea/generate-changelog.git && npm i -g ./generate-changelog && generate-changelog -s v${{ steps.package-version.outputs.version }}
+      - name: Read Release Notes
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./CHANGELOG.md
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -33,6 +45,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.content }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
