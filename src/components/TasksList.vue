@@ -39,17 +39,11 @@ const groupTasksByDate = (tasks) => {
 };
 
 export default {
-  data() {
-    return {
-      groupedTasks: undefined,
-    };
-  },
   components: { TaskGroup },
-  async mounted() {
-    await this.$store.restored;
-    this.groupedTasks = groupTasksByDate(this.tasks);
-  },
   computed: {
+    groupedTasks() {
+      return groupTasksByDate(this.tasks);
+    },
     ...mapState({
       tasks: (state) => state.task.tasks,
     }),
