@@ -25,14 +25,17 @@ jobs:
         run: npm run build-zip
       - name: Save zip path to an env variable
         run: echo "::set-env name=RELEASE_EXTENSION_FILE::$(cd dist-zip && ls *.zip)"
+      - name: Generate changelog
+        run: git clone https://github.com/MihaiVoinea/generate-changelog.git && npm install -g ./generate-changelog/ && changelog -s $npm_package_version
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: jbolda/create-release@v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body_path: ./CHANGELOG.md
           draft: false
           prerelease: false
       - name: Upload Release Asset
