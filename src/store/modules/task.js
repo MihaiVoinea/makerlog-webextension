@@ -5,7 +5,6 @@ import axios from "axios";
 export default {
   state: {
     tasks: undefined,
-    count: undefined,
     next: undefined,
     prev: undefined,
   },
@@ -29,9 +28,8 @@ export default {
     },
   },
   mutations: {
-    SET_TASKS(state, { results, count, previous, next }) {
+    SET_TASKS(state, { results, previous, next }) {
       state.tasks = results;
-      state.count = count;
       state.next = next;
       state.prev = previous;
     },
