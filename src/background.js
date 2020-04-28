@@ -29,7 +29,9 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
       await store.restored;
 
+      // Get user & tasks after login
       await store.dispatch("getUser");
+      await store.dispatch("getTasks");
 
       browser.tabs.create({});
       browser.tabs.remove(tabId);
@@ -39,10 +41,12 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
 let rws;
 const setupRws = () => {
+  // eslint-disable-next-line no-console
   console.log("setupRws() called");
   rws = new ReconnectingWebSocket(
     `wss://api.getmakerlog.com/stream/?token=${store.state.access_token}`
   );
+  // eslint-disable-next-line no-console
   rws.onmessage = (e) => console.log(e);
 };
 
@@ -84,6 +88,9 @@ const setup = async () => {
 
     // Reload user when background.js runs for the first time
     store.dispatch("getUser");
+
+    // Load tasks when background.js runs for the first time
+    store.dispatch("getTasks");
   }
 };
 

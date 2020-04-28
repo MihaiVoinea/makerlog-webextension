@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import Vue from "vue";
 import Vuex from "vuex";
@@ -5,6 +6,9 @@ import axios from "axios";
 import VuexPersistence from "vuex-persist";
 import browser from "webextension-polyfill";
 import config from "../config";
+import task from "./modules/task";
+
+axios.defaults.baseURL = config.makerlogApiUrl;
 
 const vuexBrowserStorage = new VuexPersistence({
   saveState: (key, state) => {
@@ -68,7 +72,6 @@ export default new Vuex.Store({
           dispatch("getUser");
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.log(error);
       }
     },
@@ -96,7 +99,6 @@ export default new Vuex.Store({
           }
           return resp;
         } catch (error) {
-          // eslint-disable-next-line no-console
           console.log(error);
           return error;
         }
@@ -116,10 +118,10 @@ export default new Vuex.Store({
           commit("SET_USER", resp.data);
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.log(error);
       }
     },
   },
+  modules: { task },
   plugins: [vuexBrowserStorage.plugin],
 });
