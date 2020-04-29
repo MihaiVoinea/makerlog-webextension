@@ -1,6 +1,6 @@
 {
   "name": "makerlog-webextension",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Browser extension for Makerlog, a community of independent creators that build and ship products!",
   "author": "Mihai Voinea <hi@voinea.dev>",
   "license": "MIT",
