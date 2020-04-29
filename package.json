@@ -8,6 +8,7 @@
     "node": ">=10"
   },
   "scripts": {
+    "postversion": "git push origin && git push origin --tags",
     "lint": "eslint --ext .js,.vue src",
     "prettier": "prettier \"src/**/*.{js,vue}\"",
     "prettier:write": "npm run prettier -- --write",
