@@ -52,8 +52,8 @@ const config = {
         loader: "file-loader",
         options: {
           name: "[name].[ext]",
-          outputPath: "/images/",
-          emitFile: false,
+          emitFile: true,
+          esModule: false,
         },
       },
       {
@@ -63,6 +63,7 @@ const config = {
           name: "[name].[ext]",
           outputPath: "/fonts/",
           emitFile: true,
+          esModule: false,
         },
       },
     ],
@@ -76,7 +77,7 @@ const config = {
       filename: "[name].css",
     }),
     new CopyPlugin([
-      { from: "icons", to: "icons" },
+      { from: "./assets/icons", to: "icons" },
       // eslint-disable-next-line no-use-before-define
       { from: "index.html", to: "index.html", transform: transformHtml },
       {
