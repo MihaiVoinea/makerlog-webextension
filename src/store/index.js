@@ -133,6 +133,8 @@ export default new Vuex.Store({
         "SET_REFRESH_TOKEN",
         "SET_USER",
         "ADD_TASK",
+        "DELETE_TASK",
+        "UPDATE_TASK",
         "SET_TASKS",
       ],
     }),

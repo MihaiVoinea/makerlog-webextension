@@ -36,5 +36,13 @@ export default {
     ADD_TASK(state, newTask) {
       state.tasks.unshift(newTask);
     },
+    DELETE_TASK(state, deleteTask) {
+      state.tasks = state.tasks.filter((task) => task.id !== deleteTask.id);
+    },
+    UPDATE_TASK(state, updateTask) {
+      state.tasks = state.tasks.map((task) =>
+        task.id === updateTask.id ? updateTask : task
+      );
+    },
   },
 };

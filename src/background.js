@@ -53,6 +53,12 @@ const setupRws = () => {
       case "task.created":
         store.commit("ADD_TASK", data.payload);
         break;
+      case "task.deleted":
+        store.commit("DELETE_TASK", data.payload);
+        break;
+      case "task.updated":
+        store.commit("UPDATE_TASK", data.payload);
+        break;
       default:
         console.log("rws other event catched", data.payload);
         break;
