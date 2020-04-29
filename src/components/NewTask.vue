@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import NewTaskStatusSelector from "./NewTaskStatusSelector.vue";
 
 export default {
@@ -33,7 +34,22 @@ export default {
     },
 
     async submit() {
+      const content = this.value;
       this.value = "";
+      try {
+        const resp = await axios({
+          url: "/tasks/",
+          method: "POST",
+          data: {
+            done: this.status === "done",
+            in_progress: this.status === "doing",
+            content,
+          },
+        });
+        if (resp.status !== 200 && resp.status !== 201) console.log(resp);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
