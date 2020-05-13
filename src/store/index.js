@@ -29,20 +29,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    access_token: undefined,
-    scope: undefined,
-    refresh_token: undefined,
+    token: undefined,
     user: undefined,
   },
   mutations: {
-    SET_ACCESS_TOKEN(state, accessToken) {
-      state.access_token = accessToken;
-    },
-    SET_SCOPE(state, scope) {
-      state.scope = scope;
-    },
-    SET_REFRESH_TOKEN(state, refreshToken) {
-      state.refresh_token = refreshToken;
+    SET_TOKEN(state, accessToken) {
+      state.token = accessToken;
     },
     SET_USER(state, user) {
       state.user = user;
@@ -50,62 +42,34 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn(state) {
-      return !!state.access_token;
+      return !!state.token;
     },
   },
   actions: {
-    async auth({ commit, dispatch }, code) {
+    async auth({ commit, dispatch }, credentials) {
       try {
         const resp = await axios({
-          url: config.functionsAuthUrl,
-          method: "GET",
-          params: { code },
+          method: "post",
+          url: "https://api.getmakerlog.com/api-token-auth/",
+          data: credentials,
         });
         if (resp.data) {
           // eslint-disable-next-line camelcase
-          const { access_token, scope, refresh_token } = resp.data;
+          const { token } = resp.data;
           // eslint-disable-next-line camelcase
-          axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+          axios.defaults.headers.common.Authorization = `Token ${token}`;
           axios.defaults.baseURL = config.makerlogApiUrl;
-          commit("SET_ACCESS_TOKEN", access_token);
-          commit("SET_SCOPE", scope);
-          commit("SET_REFRESH_TOKEN", refresh_token);
-          dispatch("getUser");
+          commit("SET_TOKEN", token);
+          await dispatch("getUser");
+          await dispatch("getTasks");
+          if (resp.status === 200) return true;
+          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
-      }
-    },
-    async refreshToken({ commit, dispatch }) {
-      console.log("refreshToken() called");
-      // eslint-disable-next-line camelcase
-      const oldRefreshToken = this.state.refresh_token;
-      if (oldRefreshToken)
-        try {
-          const resp = await axios({
-            url: config.functionsRefreshUrl,
-            method: "GET",
-            params: { refresh_token: oldRefreshToken },
-          });
-          if (resp.data) {
-            // eslint-disable-next-line camelcase
-            const { access_token, scope, refresh_token } = resp.data;
-            // eslint-disable-next-line camelcase
-            axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
-            axios.defaults.baseURL = config.makerlogApiUrl;
-            commit("SET_ACCESS_TOKEN", access_token);
-            commit("SET_SCOPE", scope);
-            commit("SET_REFRESH_TOKEN", refresh_token);
-            dispatch("getUser");
-          }
-          return resp;
-        } catch (error) {
-          console.log(error);
-          return error;
-        }
-      else {
-        console.log("refreshToken() failed: no refresh_token in state");
-        return new Error("no refresh_token in state");
+        console.log(error.response);
+        return false;
       }
     },
     async getUser({ commit }) {
@@ -128,9 +92,7 @@ export default new Vuex.Store({
     vuexBrowserStorage.plugin,
     sharedMutations({
       predicate: [
-        "SET_ACCESS_TOKEN",
-        "SET_SCOPE",
-        "SET_REFRESH_TOKEN",
+        "SET_TOKEN",
         "SET_USER",
         "ADD_TASK",
         "DELETE_TASK",
