@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <form @submit.prevent>
+    <form @submit.prevent="handleSubmit">
       <h1>Welcome to Makerlog!</h1>
       <span>Please log in:</span>
       <input type="text" placeholder="Username" v-model="username" />
@@ -11,12 +11,30 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
       username: "",
       password: "",
     };
+  },
+  methods: {
+    async handleSubmit() {
+      const status = await this.auth({
+        username: this.username,
+        password: this.password,
+      });
+      if (status) {
+        await this.$store.restored;
+        this.$router.push({ name: "home" });
+      } else {
+        this.username = "";
+        this.password = "";
+      }
+    },
+    ...mapActions(["auth"]),
   },
 };
 </script>

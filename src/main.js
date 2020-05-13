@@ -3,6 +3,7 @@ import infiniteScroll from "vue-infinite-scroll";
 import axios from "axios";
 import App from "./App.vue";
 import store from "./store";
+// eslint-disable-next-line import/no-named-as-default, import/no-named-as-default-member
 import router from "./router";
 import config from "./config";
 import "normalize.css";
@@ -17,7 +18,7 @@ const setupAxios = async () => {
   await store.restored;
   axios.defaults.baseURL = config.makerlogApiUrl;
   if (store.getters.isLoggedIn) {
-    axios.defaults.headers.common.Authorization = `Bearer ${store.state.access_token}`;
+    axios.defaults.headers.common.Authorization = `Token ${store.state.token}`;
   }
 };
 setupAxios();
