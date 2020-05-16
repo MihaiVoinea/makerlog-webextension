@@ -1,6 +1,6 @@
 <template>
   <li>
-    <TaskIcon />
+    <TaskIcon :status="status" />
     <div class="content">{{ task.content }}</div>
   </li>
 </template>
@@ -26,5 +26,12 @@ export default {
   name: "Task",
   components: { TaskIcon },
   props: ["task"],
+  computed: {
+    status() {
+      if (this.task.done) return "done";
+      if (this.task.in_progress) return "doing";
+      return "todo";
+    },
+  },
 };
 </script>

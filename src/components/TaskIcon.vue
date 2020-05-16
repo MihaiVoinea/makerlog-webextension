@@ -1,6 +1,37 @@
 <template>
   <div>
     <svg
+      v-if="status === 'todo'"
+      aria-hidden="true"
+      data-prefix="far"
+      data-icon="circle"
+      class="svg-inline--fa fa-circle fa-w-16"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      color="#f39c12"
+    >
+      <path
+        fill="currentColor"
+        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+      />
+    </svg>
+    <svg
+      v-else-if="status === 'doing'"
+      aria-hidden="true"
+      data-prefix="fas"
+      data-icon="dot-circle"
+      class="svg-inline--fa fa-dot-circle fa-w-16"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      color="#f39c12"
+    >
+      <path
+        fill="currentColor"
+        d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm80 248c0 44.112-35.888 80-80 80s-80-35.888-80-80 35.888-80 80-80 80 35.888 80 80z"
+      />
+    </svg>
+    <svg
+      v-else
       aria-hidden="true"
       data-prefix="fas"
       data-icon="check-circle"
@@ -31,5 +62,6 @@ div {
 <script>
 export default {
   name: "TaskIcon",
+  props: ["status"],
 };
 </script>
