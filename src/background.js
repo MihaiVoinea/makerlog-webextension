@@ -13,6 +13,7 @@ let rws;
 const setupRws = () => {
   // eslint-disable-next-line no-console
   console.log("setupRws() called");
+  if (rws) rws.close();
   rws = new ReconnectingWebSocket(
     `wss://api.getmakerlog.com/stream/?token=${store.state.token}`
   );
