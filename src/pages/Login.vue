@@ -6,6 +6,7 @@
       <input type="text" placeholder="Username" v-model="username" />
       <input type="password" placeholder="Password" v-model="password" />
       <input type="submit" />
+      <a href="https://getmakerlog.com/begin">Or register a new account!</a>
     </form>
   </div>
 </template>
@@ -49,8 +50,11 @@ h1 {
   color: var(--c-main);
   margin: 10px;
 }
+a {
+  margin: 20px auto 10px auto;
+}
 span {
-  margin: 10px auto 10px auto;
+  margin: 10px auto;
 }
 input {
   margin-top: 10px;
