@@ -8,6 +8,7 @@ import browser from "webextension-polyfill";
 import sharedMutations from "vuex-shared-mutations";
 import config from "../config";
 import task from "./modules/task";
+import setupRws from "../rws";
 
 axios.defaults.baseURL = config.makerlogApiUrl;
 
@@ -46,7 +47,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async auth({ commit, dispatch }, credentials) {
+    async auth({ commit, dispatch, state }, credentials) {
       try {
         const resp = await axios({
           method: "post",
@@ -60,8 +61,10 @@ export default new Vuex.Store({
           axios.defaults.headers.common.Authorization = `Token ${token}`;
           axios.defaults.baseURL = config.makerlogApiUrl;
           commit("SET_TOKEN", token);
+          console.log(token);
           await dispatch("getUser");
           await dispatch("getTasks");
+          setupRws();
           if (resp.status === 200) return true;
           return false;
         }
